@@ -4,16 +4,16 @@
 *.dll
 
 # ignore document files
-article.pdf
+#article.pdf
 article.tex
-article.docx
-figures.pdf
+#article.docx
+#figures.pdf
 figures.tex
 slides.pdf
-tables.pdf
+#tables.pdf
 tables.tex
-supporting-information.pdf
-supporting-information.docx
+#supporting-information.pdf
+#supporting-information.docx
 supporting-information.tex
 code/rmarkdown/supporting-information_files
 code/rmarkdown/supporting-information_cache
