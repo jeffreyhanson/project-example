@@ -1,0 +1,115 @@
+---
+title: "Funnel web spiders are a menace"
+subtitle: "\\quad"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+author: |
+  | \normalsize Jeffrey O. Hanson*^1^
+  |     \newline
+  | \small ^1^School of Biological Sciences, The University of Queensland, Saint Lucia, QLD, Australia
+  | \small *email jeffrey.hanson@uqconnect.edu.au
+fontsize: 11pt
+documentclass: article
+subparagraph: true
+geometry: margin=1in
+bibliography: references.bib
+csl: reference-style.csl
+output:
+  rmarkdown::pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    includes:
+      in_header: preamble.tex
+---
+
+```{r, include = FALSE}
+# set directory
+knitr::opts_knit$set(root.dir = normalizePath("../.."))
+```
+
+```{r, include = FALSE}
+# restore session
+session::restore.session("data/final/results.rda")
+
+# load helper functions
+source("code/R/functions/helpers.R")
+
+# calculate variables for reporting
+jags_site_parameters <-
+  grep("site_number", rownames(jags_fit$BUGSoutput$summary), fixed = TRUE)
+```
+
+\doublespacing
+
+# MANUSCRIPT INFORMATION
+
+Format: Journal of Applied Ecology (article)    \newline
+Abstract word count: ? / 350    \newline
+Main text word count: ? / 7,000  (including captions and references)  \newline
+Number of references: ?    \newline
+Number of figures: 1 / 6    \newline
+Keywords: spiders, spiders, spiders, spiders, spiders, spiders, spiders, spiders \newline
+Spelling: American English (en-US)
+
+\clearpage
+
+# ABSTRACT
+
+Funnel web spiders are ferocious beasts that terrorize humans across Australia. In particular, they wreak havoc on the local tourism industry of Fraser Island. Here we examine the population of funnel web spiders found along the walking path from a camp site in Fraser Island to Lake Boomanjin. To achieve this, we subdivided the walking path into multiple transects and surveyed each transect multiple times over 8 days. We then used open _n_-mixture models to estimate population size within each transect. Our models indicate that over 800 spiders could occur along this walking track. Fortunately, our models suggest that few spiders occur near the camp site -- meaning that tourists may be relatively safe along long as they do not stray too far from the camp site. In conclusion, the dense infestation of spiders poses a serious threat to the safety of tourists and we recommend for their immediate eradication.
+
+\clearpage
+
+# 1 | INTRODUCTION
+
+Fraser island is a popular tourist attraction. It is home to a great many interesting flora and fauna. In addition, it has several famous sites. The most famous site, perhaps, is Lake Boomanjin. This magnificent water feature is visited by scores of individuals throughout the year. However, the walking track to Lake Boomanjin is home by a population of funnel web spiders. This population may pose a serious safety risk to tourists. Here, we aimed to map the distribution of these hairy beasts along the walking track. Additionally -- using the size of the spider holes as a proxy for age -- we also aimed to understand the age-class structure of the population.
+
+# 2 | MATERIALS AND METHODS
+
+## 2.1 | Study system
+
+Our study system was Fraser Island, Australia. Google it.
+
+## 2.2 | Data collection
+
+The Boomanjin Walking track was divided into 16 transects (each approximately 370 m in length; Figure 1). Each transect was surveyed for spider holes once a day over eight days (11--14/07/2016, 16--20/07/2016). These surveys were conducted by a team consisting of two to three expert spider hunters. The size of each hole was measured to the nearest millimeter. The start and end times for each survey was recorded to assess search effort.
+
+_Insert Figure 1 here._
+
+\clearpage
+
+## 2.3 | Statistical analysis
+
+Open _n_-mixture models were used to estimate the population size [@r1]. These models estimate the probability of detecting a spider in a given transect independent of the total number of spiders in the transect. Models were fit using the _R2jags_ _R_ package [@r2] (`r pretty_number(jags_parameters$iterations)` total iterations; `r pretty_number(jags_parameters$burnin)` burnin iterations; thinned by `r pretty_number(jags_parameters$thin)` iterations; `r pretty_number(jags_parameters$chains)`). Model convergence was assessed using $\hat{R}$ values. All analyses were conducted in _R_ [version `r as.character(getRversion())`; @r3].
+
+# 3 | RESULTS
+
+A total of `r nrow(obs_data)` spider holes were found. An average of `r mean(visit_data$observed)` (`r round(sd(visit_data$observed), 2)` standard deviation [S.D.]) spider holes were found in each visit to a given transect. Typically, transects were surveyed for `r round(mean(visit_data$search_time, na.rm = TRUE), 2)` minutes (`r round(sd(visit_data$search_time, na.rm = TRUE), 2)` S.D.). Based on the open $n$-mixture model, the probability of detecting a spider hole in a given transect was estimated to be `r round(jags_fit$BUGSoutput$summary["p", "mean"] * 100, 2)`% (`r round(jags_fit$BUGSoutput$summary["p", "sd"], 2)` S.D.). The total population size along the track was estimated to be `r round(jags_fit$BUGSoutput$summary["total_number", "mean"], 2)` (`r round(jags_fit$BUGSoutput$summary["total_number", "sd"], 2)` S.D.).
+
+The size of the spider holes were bimodally distributed (Figure 2). The spider holes tended to range between 0--10 mm and 20--35 mm. These results suggest that most of the spiders surveyed were either juveniles or adults.
+
+_Insert Figure 2 here._
+
+The spider holes were mostly found in a single transect (transect `r which.max(jags_fit$BUGSoutput$summary[jags_site_parameters, "mean"])` contained `r round((max(jags_fit$BUGSoutput$summary[jags_site_parameters,"mean"]) /sum(jags_fit$BUGSoutput$summary[jags_site_parameters, "mean"])) * 100, 2)` % of the population; Figure 3).
+
+_Insert Figure 3 here._
+
+# 4 | DISCUSSION
+
+Clearly, there are too many spiders. These results speak for themselves---no further discussion is necessary.
+
+# ACKNOWLEDGEMENTS
+
+JOH was supported by a chair while working on this manuscript. I thank all individuals involved with collecting the data.
+
+# AUTHORS' CONTRIBUTIONS
+
+JOH conceived the study, performed the analyses, and drafted the manuscript. All authors contributed critically to writing the manuscript and gave final approval for publication.
+
+# DATA AVAILABILITY STATEMENT
+
+Pending publication, code, data, and results will be made available via the Zenodo Digital Repository TODO [@rTODO].
+
+# ORCID
+
+Jeffrey O. Hanson: 0000-0002-4716-6134
+
+# REFERENCES

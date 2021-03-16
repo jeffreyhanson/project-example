@@ -1,0 +1,73 @@
+# C++ compiled files
+*.o
+*.so
+*.dll
+
+# ignore document files
+article.pdf
+article.tex
+article.docx
+figures.pdf
+figures.tex
+slides.pdf
+tables.pdf
+tables.tex
+supporting-information.pdf
+supporting-information.docx
+supporting-information.tex
+code/rmarkdown/supporting-information_files
+code/rmarkdown/supporting-information_cache
+code/rmarkdown/supporting-information.tex
+code/rmarkdown/slides_files
+code/rmarkdown/slides.tex
+code/rmarkdown/article.log
+code/rmarkdown/article_files/figure-latex*
+
+# ignore large data files
+article/scp-connectivity.zip
+data/raw/wdpa/*zip
+data/raw/human-footprint-index-2009/*zip
+data/raw/human-footprint-index-2013/*zip
+data/raw/human-footprint-index-2013/*tif
+data/raw/habitat-intactness/*.tif
+data/raw/pnw-connectivity/*.zip
+data/raw/land-parcels/*.zip
+data/raw/land-parcels/*.gdb*
+data/raw/ebird/*.zip
+data/raw/land-cover/*.zip
+data/raw/land-cover/*.tif
+data/raw/global-habitat-heterogeneity/*.tif
+data/raw/ebird/ConnectivityPrioritization_eBird/*
+data/raw/nolte-data/*.tif
+data/raw/adaptwest-data/*.7z
+data/raw/washington-connected-landscapes/*.zip
+
+# R profile files
+*.Rproj.user
+*.Rhistory
+
+# log files
+gurobi.log
+*.Rout
+
+# system files
+.directory
+
+# cache
+data/intermediate/*
+data/final/results.rda
+code/rmarkdown/figures_files/*
+
+code/rmarkdown/supporting_information_files/*
+
+# temp files
+*.crdownload*
+code/*.md
+
+# packrat library files
+packrat/lib
+packrat/lib-R
+
+# do not ignore the following files
+!*.gitkeep
+packrat/lib*/

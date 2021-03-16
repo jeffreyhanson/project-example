@@ -1,0 +1,7 @@
+title = "general parameters"
+
+[debug]
+threads = 1
+
+[release]
+threads = 12

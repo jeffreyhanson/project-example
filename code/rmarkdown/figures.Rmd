@@ -1,0 +1,207 @@
+---
+title: |
+  | Figures for:
+  | Funnel web spiders are a menace
+subtitle: "\\quad"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+author: |
+  | \normalsize Jeffrey O. Hanson*^1^
+  |     \newline
+  | \small ^1^School of Biological Sciences, The University of Queensland, Saint Lucia, QLD, Australia
+  | \small *email jeffrey.hanson@uqconnect.edu.au
+fontsize: 11pt
+documentclass: article
+subparagraph: true
+geometry: margin=1in
+bibliography: references.bib
+csl: reference-style.csl
+output:
+  rmarkdown::pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    includes:
+      in_header: preamble.tex
+---
+
+```{r, include=FALSE}
+knitr::opts_knit$set(root.dir = normalizePath("../.."))
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, dev = "png", dev.args = list(type = "cairo"), dpi = 500, fig.align = "center")
+```
+
+```{r, include = FALSE}
+# restore session
+session::restore.session("data/final/results.rda")
+
+# load helper functions
+source("code/R/functions/helpers.R")
+
+# define variables
+small_figure_width <- 80 * 0.0393701
+large_figure_width <- 180 * 0.0393701
+
+# prepare data for plotting transects
+
+## transect plotting data
+### extract walk coordinates
+walk_mtx <- walk_data@lines[[1]]@Lines[[1]]@coords
+
+### create transect data
+transect_spatial_data <-
+  lapply(
+    seq_len(nrow(transect_data)),
+    function(i) {
+    # find transect start point
+    curr_start <-
+      transect_data[i, c("start_lon", "start_lat")] %>%
+      as.matrix() %>%
+      fields::rdist.earth(walk_mtx, miles = FALSE) %>%
+      c() %>%
+      which.min()
+    # find transect end point
+    curr_end <-
+      transect_data[i, c("end_lon", "end_lat")] %>%
+      as.matrix() %>%
+      fields::rdist.earth(walk_mtx, miles = FALSE) %>%
+      c() %>%
+      which.min()
+    # return transect line
+    sp::Lines(
+      sp::Line(walk_mtx[seq(curr_start, curr_end), ]),
+      ID = as.character(i))
+  }) %>%
+  sp::SpatialLines(proj4string = sp::CRS("+init=epsg:4326")) %>%
+  sp::SpatialLinesDataFrame(
+    data = data.frame(id = seq_len(nrow(transect_data))))
+
+### add in predictions from model
+jags_site_parameters <-
+  grep("site_number", rownames(jags_fit$BUGSoutput$summary), fixed = TRUE)
+transect_spatial_data$estimated_n <-
+  jags_fit$BUGSoutput$summary[jags_site_parameters, "mean"]
+
+### prepare spatial data for plotting
+transect_plot_data <-
+  transect_spatial_data %>%
+  ggplot2::fortify() %>%
+  dplyr::mutate(
+    estimated_n = transect_spatial_data$estimated_n[as.numeric(.$id)])
+
+# import basemaps
+## find map extent
+map_bbox <-
+  walk_data %>%
+  rgeos::gCentroid() %>%
+  sf::st_as_sf() %>%
+  sf::st_transform(32756) %>%
+  sf::st_buffer(2500) %>%
+  sf::st_transform(4326) %>%
+  sf::as_Spatial() %>%
+  raster::extent()
+```
+
+```{r "figure_1", message = FALSE, fig.height = small_figure_width, fig.width = small_figure_width, out.width = paste0(small_figure_width, "in"), out.height = paste0(small_figure_width, "in"), fig.cap = "Map of study area."}
+# prepare data
+## landmark data
+landmark_data <-
+    transect_data %>%
+    dplyr::select(start_lon, start_lat) %>%
+    as.matrix() %>%
+    rbind(
+      transect_data %>%
+      `[`(nrow(.), ) %>%
+      dplyr::select(end_lon, end_lat) %>%
+      as.matrix()) %>%
+    as.data.frame() %>%
+    setNames(c("lon", "lat")) %>%
+    tibble::as_tibble()
+
+# create label data
+label_data <-
+  tibble::tibble(
+    x = c(153.09, 153.085, 153.098),
+    y = c(-25.556, -25.572, -25.6),
+    label = c("Lake Boomanjin", "Sand Blow", "Dilli Village"))
+
+# create map
+p <-
+  ggplot2::ggplot() +
+  ggplot2::geom_path(
+    data = transect_plot_data,
+    ggplot2::aes(x = long, y = lat, group = group),
+    color = "black") +
+  ggplot2::geom_label(
+    ggplot2::aes(x = x, y = y, label = label),
+    data = label_data,
+    size = 2) +
+  ggplot2::coord_fixed(
+    xlim = c(map_bbox@xmin, map_bbox@xmax),
+    ylim = c(map_bbox@ymin, map_bbox@ymax)) +
+  ggplot2::theme(
+    axis.ticks = ggplot2::element_blank(),
+    axis.text = ggplot2::element_blank(),
+    axis.title = ggplot2::element_blank(),
+    axis.line = ggplot2::element_blank(),
+    axis.ticks.length = ggplot2::unit(0, "null"),
+    axis.ticks.margin = ggplot2::unit(0, "null"),
+    panel.border = ggplot2::element_rect(color = "black", fill = NA),
+    panel.grid = ggplot2::element_blank(),
+    legend.position = "none",
+    legend.text = ggplot2::element_text(size = 8),
+    legend.margin = ggplot2::unit(0, "null"),
+    plot.margin = ggplot2::unit(c(0.001, 0.001, 0.001, 0.01), "pt"),
+    strip.background = ggplot2::element_rect(color = "black", fill = "black"),
+    strip.text = ggplot2::element_text(color = "white"))
+
+# render map
+print(p)
+```
+
+```{r "figure_2", message = FALSE, fig.height = small_figure_width, fig.width = small_figure_width, out.width = paste0(small_figure_width, "in"), out.height = paste0(small_figure_width, "in"), fig.cap = "Histogram of spider hole sizes."}
+# make plot
+p <-
+  ggplot2::ggplot(
+    data = hole_data,
+    ggplot2::aes(x = hole_diameter)) +
+  ggplot2::geom_histogram(binwidth = 5) +
+  ggplot2::theme(
+    axis.line.x = ggplot2::element_line(),
+    axis.line.y = ggplot2::element_line()) +
+  ggplot2::xlab("Hole diameter (mm)") +
+  ggplot2::ylab("Frequency")
+
+# render plot
+print(p)
+```
+
+```{r "figure_3", message = FALSE, fig.height = small_figure_width, fig.width = small_figure_width, out.width = paste0(small_figure_width, "in"), out.height = paste0(small_figure_width, "in"), fig.cap = "Distribution of spider holes along the walking track. Lines show the transects used to sample the distribution of spiders along the walk. The color of each transect corresponds to their estimated number of spider holes using the open $n$-mixture model."}
+# create map
+p <-
+  ggplot2::ggplot() +
+  ggplot2::geom_path(
+    data = transect_plot_data,
+    ggplot2::aes(x = long, y = lat, group = group, color = estimated_n),
+    size = 2) +
+  ggplot2::scale_color_gradient(name = "Estimated\nabundance") +
+  ggplot2::coord_fixed(
+    xlim = c(map_bbox@xmin, map_bbox@xmax),
+    ylim = c(map_bbox@ymin, map_bbox@ymax)) +
+  ggplot2::theme(
+    axis.ticks = ggplot2::element_blank(),
+    axis.text = ggplot2::element_blank(),
+    axis.title = ggplot2::element_blank(),
+    axis.line = ggplot2::element_blank(),
+    axis.ticks.length = ggplot2::unit(0, "null"),
+    axis.ticks.margin = ggplot2::unit(0, "null"),
+    panel.border = ggplot2::element_rect(color = "black", fill = NA),
+    panel.grid = ggplot2::element_blank(),
+    legend.position = c(0.99, 0.99),
+    legend.justification = c(1, 1),
+    legend.text = ggplot2::element_text(size = 8),
+    legend.margin = ggplot2::unit(c(5.5, 5.5, 5.5, 5.5), "pt"),
+    plot.margin = ggplot2::unit(c(0.001, 0.001, 0.001, 0.01), "pt"),
+    strip.background = ggplot2::element_rect(color = "black", fill = "black"),
+    strip.text = ggplot2::element_text(color = "white"))
+
+# render map
+print(p)
+```

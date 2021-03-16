@@ -1,0 +1,13 @@
+title = "JAGS parameters"
+
+[debug]
+burnin = 50
+iterations = 100
+thin = 2
+chains = 2
+
+[release]
+burnin = 100000
+iterations = 200000
+thin = 5
+chains = 4

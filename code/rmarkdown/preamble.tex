@@ -1,0 +1,77 @@
+% load packages
+\usepackage{amsmath,amsfonts,float,makecell,titletoc,titlesec,tocloft,lineno,booktabs,subfiles,textcomp,tabularx,etoolbox,longtable,adjustbox}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[utf8]{inputenc}
+\usepackage[singlespacing]{setspace}
+\usepackage[autostyle]{csquotes}
+
+%override utf8 characters
+%\DeclareUnicodeCharacter{0301}{*************************************}
+
+% format captions
+\usepackage[labelfont={small,bf}, labelsep=space, font={small}]{caption}
+
+% line numbers
+\linenumbers
+
+% allow breaks in equations
+\allowdisplaybreaks
+
+% format section headers
+\titleformat*{\section}{\large\bfseries}
+\titleformat*{\subsection}{\large\bfseries}
+
+% make figures static
+\let\origfigure\figure
+\let\endorigfigure\endfigure
+\renewenvironment{figure}[1][2] {
+\expandafter\origfigure\expandafter[H]
+} {
+\endorigfigure
+}
+
+% center tables
+\let\Begin\begin
+\let\End\end
+
+% make tables in fontnote size font
+\AtBeginEnvironment{longtable}{\scriptsize\singlespacing}
+\AtBeginEnvironment{multicols}{\scriptsize\singlespacing}
+\AtBeginEnvironment{tabular}{\scriptsize\singlespacing}
+\AtBeginEnvironment{longtabu}{\scriptsize\singlespacing}
+
+% define struts for tables
+\newcommand\T{\rule{0pt}{2.6ex}} % top strut
+\newcommand\B{\rule[-1.2ex]{0pt}{0pt}} % bottom strut
+
+% add extra space between rows
+\renewcommand{\arraystretch}{1.2}
+
+% fix author spacing
+\makeatletter
+\def\and{%
+  \end{tabular}%
+  \hskip 0.1em \@plus.17fil\relax
+  \begin{tabular}[t]{c}}
+\makeatother
+
+% format urls
+\urlstyle{same}
+\hypersetup{urlcolor=black} % Does not apply color to href's
+\makeatletter
+\g@addto@macro{\UrlBreaks}{\UrlOrds\do\.\do\@\do\\\do\/\do\!\do\_\do\|\do\;\do\>\do\]\do\)\do\,\do\?\do\'\do+\do\=\do\#}
+% \do-\do\/\do\\\do\.\do=}
+\makeatother
+
+% eqn formatting commands
+\makeatletter
+\newcommand{\specialcell}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\ignorespaces\fi}
+\newcommand{\pushright}[1]{\ifmeasuring@#1\else\omit\hfill$\displaystyle#1$\fi\ignorespaces}
+\newcommand{\pushleft}[1]{\ifmeasuring@#1\else\omit$\displaystyle#1$\hfill\fi\ignorespaces}
+\makeatother
+
+% update include graphics
+\let\latexincludegraphics\includegraphics
+\renewcommand{\includegraphics}[2][]{%
+  \makebox[\textwidth]{\latexincludegraphics[#1]{#2}}}
