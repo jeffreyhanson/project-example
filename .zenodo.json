@@ -1,0 +1,27 @@
+{
+    "description": "<p>**This repository provides an example for organizing scientific projects. All data, findings, and conclusions are satire. This work does not provide any real world insight.**</p>\n\n<p>Funnel web spiders are ferocious beasts that terrorize humans across Australia. In particular, they wreak havoc on the local tourism industry of Fraser Island. Here we examine the population of funnel web spiders found along the walking path from a camp site in Fraser Island to Lake Boomanjin. To achieve this, we subdivided the walking path into multiple transects and surveyed each transect multiple times over 8 days. We then used open _n_-mixture models to estimate population size within each transect. Our models indicate that over 800 spiders could occur along this walking track. Fortunately, our models suggest that few spiders occur near the camp site -- meaning that tourists may be relatively safe along long as they do not stray too far from the camp site. In conclusion, the dense infestation of spiders poses a serious threat to the safety of tourists and we recommend for their immediate eradication.</p>", 
+    "license": "other-open", 
+    "title": "Code and data for: Funnel web spiders are a menace", 
+    "version": "v0.0.01", 
+    "upload_type": "software", 
+    "publication_date": "2021-03-16", 
+    "creators": [
+        {
+            "affiliation": "School of Biological Sciences, The University of Queensland, Saint Lucia, QLD, Australia", 
+            "name": "Jeffrey O Hanson"
+        }
+    ], 
+    "access_right": "open", 
+    "related_identifiers": [
+        {
+            "scheme": "url", 
+            "identifier": "https://github.com/jeffreyhanson/project-example/tree/v0.0.01", 
+            "relation": "isSupplementTo"
+        }, 
+        {
+            "scheme": "doi", 
+            "identifier": "10.5281/zenodo.4607129", 
+            "relation": "isVersionOf"
+        }
+    ]
+}
