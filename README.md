@@ -2,7 +2,7 @@
 
 [![Status](https://img.shields.io/badge/Status-in%20preparation-red.svg?style=flat-square)]()
 [![License (GPL version 3)](https://img.shields.io/badge/License-GNU%20GPL%20version%203-brightgreen.svg?style=flat-square)](http://opensource.org/licenses/GPL-3.0)
-[![DOI](https://img.shields.io/badge/DOI-10.5281/TODO.svg?style=flat-square)](https://dx.doi.org/10.5281)
+[![DOI](https://img.shields.io/badge/DOI-10.5281/zenodo.4607130.svg?style=flat-square)](https://doi.org/10.5281/zenodo.4607130)
 
 [Jeffrey O. Hanson](http://www.jeffrey-hanson.com)
 

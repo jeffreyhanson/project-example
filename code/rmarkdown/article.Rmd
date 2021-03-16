@@ -106,7 +106,7 @@ JOH conceived the study, performed the analyses, and drafted the manuscript. All
 
 # DATA AVAILABILITY STATEMENT
 
-Pending publication, code, data, and results will be made available via the Zenodo Digital Repository TODO [@rTODO].
+Pending publication, code, data, and results will be made available via the Zenodo Digital Repository https://doi.org/10.5281/zenodo.4607130 [@r4].
 
 # ORCID
 
