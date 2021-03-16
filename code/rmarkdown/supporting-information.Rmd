@@ -1,0 +1,81 @@
+---
+title: |
+  | Supporting Information for:
+  | Funnel web spiders are a menace
+subtitle: "\\quad"
+date: "`r format(Sys.time(), '%d %B %Y')`"
+author: |
+  | \normalsize Jeffrey O. Hanson*^1^
+  |     \newline
+  | \small ^1^School of Biological Sciences, The University of Queensland, Saint Lucia, QLD, Australia
+  | \small *email jeffrey.hanson@uqconnect.edu.au
+fontsize: 11pt
+documentclass: article
+subparagraph: true
+geometry: margin=1in
+bibliography: references.bib
+csl: reference-style.csl
+output:
+  rmarkdown::pdf_document:
+    fig_caption: yes
+    keep_tex: yes
+    includes:
+      in_header: preamble.tex
+---
+
+```{r, include = FALSE}
+knitr::opts_knit$set(root.dir = normalizePath("../.."))
+knitr::opts_chunk$set(echo = FALSE, message = FALSE, warning = FALSE, dev = "png", dev.args = list(type = "cairo"), dpi = 500, fig.align = "center")
+```
+
+\newcommand{\oldtabcolsep}{\tabcolsep}
+\renewcommand{\thefigure}{S\arabic{figure}}
+\renewcommand{\thetable}{S\arabic{table}}
+
+```{r, include = FALSE}
+# restore session
+session::restore.session("data/final/results.rda")
+
+# load helper functions
+source("code/R/functions/helpers.R")
+
+# calculate variables for reporting
+jags_site_parameters <-
+  grep("site_number", rownames(jags_fit$BUGSoutput$summary), fixed = TRUE)
+```
+
+\clearpage
+
+# SUPPLEMENTARY FIGURES
+
+```{r, results = "asis"}
+# prepare data
+d <-
+  visit_data %>%
+  dplyr::mutate(
+    n_est =
+      jags_fit$BUGSoutput$summary[jags_site_parameters,"mean"][
+        as.numeric(.$transect_number)]) %>%
+  dplyr::select(
+    transect_number:observed, n_est, start:search_time) %>%
+  dplyr::mutate(
+    search_time = round(search_time, 2)) %>%
+  dplyr::mutate(
+    start = as.character(start),
+    end = as.character(end)) %>%
+  dplyr::mutate(
+    start = replace(start, is.na(start), "--"),
+    end = replace(end, is.na(end), "--"),
+    observed = replace(observed, is.na(observed), "--"),
+    search_time = replace(search_time, is.na(search_time), "--"))
+# set names
+cn <- c(
+  "Transect", "Date", "$n$", "$\\hat{n}$", "Start time",
+  "End time", "Search time")
+
+# render data
+knitr::kable(
+  d, col.names = cn, digits= 2,
+  caption = "Summary of observation data along each transect. Data show the number of spider holes observed ($n$) and that predicted by the open \\text{n}-mixture model ($\\hat{n}$). Dashes indicate that certain transects were not sampled during certain time periods.",
+  align = "c")
+```

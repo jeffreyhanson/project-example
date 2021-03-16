@@ -70,7 +70,7 @@ Our study system was Fraser Island, Australia. Google it.
 
 ## 2.2 | Data collection
 
-The Boomanjin Walking track was divided into 16 transects (each approximately 370 m in length; Figure 1). Each transect was surveyed for spider holes once a day over eight days (11--14/07/2016, 16--20/07/2016). These surveys were conducted by a team consisting of two to three expert spider hunters. The size of each hole was measured to the nearest millimeter. The start and end times for each survey was recorded to assess search effort.
+The Boomanjin Walking track was divided into 16 transects (each approximately 370 m in length; Figure 1). Each transect was surveyed for spider holes once a day over eight days (11--14/07/2016, 16--20/07/2016, see Table S1 for details). These surveys were conducted by a team consisting of two to three expert spider hunters. The size of each hole was measured to the nearest millimeter. The start and end times for each survey was recorded to assess search effort.
 
 _Insert Figure 1 here._
 

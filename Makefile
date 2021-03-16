@@ -55,7 +55,7 @@ article/article.docx: code/rmarkdown/article.Rmd code/rmarkdown/references.bib c
 	rm -f code/rmarkdown/article2.Rmd
 	mv code/rmarkdown/article.docx article/
 
-article/supporting-information.pdf: code/rmarkdown/supporting-information.Rmd code/rmarkdown/preamble.tex code/rmarkdown/references.bib code/rmarkdown/reference-style.csl code/rmarkdown/multi-page-child.Rmd
+article/supporting-information.pdf: code/rmarkdown/supporting-information.Rmd code/rmarkdown/preamble.tex code/rmarkdown/references.bib code/rmarkdown/reference-style.csl
 	$(R) -e "rmarkdown::render('code/rmarkdown/supporting-information.Rmd')"
 	mv code/rmarkdown/supporting-information.pdf article/
 	rm -f code/rmarkdown/supporting-information.md
